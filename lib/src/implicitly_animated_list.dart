@@ -124,6 +124,9 @@ class ImplicitlyAnimatedList<E extends Object> extends StatelessWidget {
   /// The amount of space by which to inset the children.
   final EdgeInsetsGeometry? padding;
 
+  /// {@macro flutter.widgets.SliverChildBuilderDelegate.findChildIndexCallback}
+  final ChildIndexGetter? findChildIndexCallback;
+
   /// The clip behavior to be used by the scroll view.
   ///
   /// Defaults to [Clip.hardEdge].
@@ -151,6 +154,7 @@ class ImplicitlyAnimatedList<E extends Object> extends StatelessWidget {
     this.shrinkWrap = false,
     this.padding,
     this.clipBehavior = Clip.hardEdge,
+    this.findChildIndexCallback,
   }) : super(key: key);
 
   @override
@@ -179,6 +183,7 @@ class ImplicitlyAnimatedList<E extends Object> extends StatelessWidget {
                   removeDuration: removeDuration,
                   updateDuration: updateDuration,
                   spawnIsolate: spawnIsolate,
+                  findChildIndexCallback: findChildIndexCallback,
                 )
               : SliverImplicitlyAnimatedList<E>.separated(
                   items: items,
@@ -191,6 +196,7 @@ class ImplicitlyAnimatedList<E extends Object> extends StatelessWidget {
                   removeDuration: removeDuration,
                   updateDuration: updateDuration,
                   spawnIsolate: spawnIsolate,
+                  findChildIndexCallback: findChildIndexCallback,
                 ),
         ),
       ],
@@ -201,6 +207,9 @@ class ImplicitlyAnimatedList<E extends Object> extends StatelessWidget {
 /// A Flutter Sliver that implicitly animates between the changes of two lists.
 class SliverImplicitlyAnimatedList<E extends Object>
     extends ImplicitlyAnimatedListBase<Widget, E> {
+  /// {@macro flutter.widgets.SliverChildBuilderDelegate.findChildIndexCallback}
+  final ChildIndexGetter? findChildIndexCallback;
+
   /// Creates a Flutter Sliver that implicitly animates between the changes of two lists.
   ///
   /// {@template implicitly_animated_reorderable_list.constructor}
@@ -234,6 +243,7 @@ class SliverImplicitlyAnimatedList<E extends Object>
     Duration removeDuration = const Duration(milliseconds: 500),
     Duration updateDuration = const Duration(milliseconds: 500),
     bool? spawnIsolate,
+    this.findChildIndexCallback,
   }) : super(
           key: key,
           items: items,
@@ -285,6 +295,7 @@ class SliverImplicitlyAnimatedList<E extends Object>
     Duration removeDuration = const Duration(milliseconds: 500),
     Duration updateDuration = const Duration(milliseconds: 500),
     bool? spawnIsolate,
+    this.findChildIndexCallback,
   }) : super(
           key: key,
           items: items,
@@ -317,6 +328,7 @@ class _SliverImplicitlyAnimatedListState<E extends Object>
     return CustomSliverAnimatedList(
       key: animatedListKey,
       initialItemCount: newList.length,
+      findChildIndexCallback: widget.findChildIndexCallback,
       itemBuilder: (context, index, animation) {
         final E? item = data.getOrNull(index) ??
             newList.getOrNull(index) ??

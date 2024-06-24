@@ -15,6 +15,7 @@ class CustomSliverAnimatedList extends StatefulWidget {
     required this.itemBuilder,
     this.initialItemCount = 0,
     this.delegateBuilder,
+    this.findChildIndexCallback,
   })  : assert(initialItemCount >= 0),
         super(key: key);
 
@@ -38,6 +39,9 @@ class CustomSliverAnimatedList extends StatefulWidget {
 
   /// Builds the delegate to use for the list view.
   final DelegateBuilder? delegateBuilder;
+
+  /// {@macro flutter.widgets.SliverChildBuilderDelegate.findChildIndexCallback}
+  final ChildIndexGetter? findChildIndexCallback;
 
   @override
   CustomSliverAnimatedListState createState() =>
@@ -289,8 +293,10 @@ class CustomSliverAnimatedListState extends State<CustomSliverAnimatedList>
 class _ActiveItem implements Comparable<_ActiveItem> {
   _ActiveItem.incoming(this.controller, this.itemIndex)
       : removedItemBuilder = null;
+
   _ActiveItem.outgoing(
       this.controller, this.itemIndex, this.removedItemBuilder);
+
   _ActiveItem.index(this.itemIndex)
       : controller = null,
         removedItemBuilder = null;
